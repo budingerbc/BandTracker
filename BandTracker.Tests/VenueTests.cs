@@ -12,3 +12,10 @@ namespace BandTracker.Tests
     {
       DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=3306;database=band_tracker_test;";
     }
+
+    public void Dispose()
+    {
+
+    }
+  }
+}
