@@ -127,6 +127,55 @@ namespace BandTracker.Models
       return venuesPlayed;
     }
 
+    public void Update(string newName)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"UPDATE bands SET name = @name WHERE id = @thisId;";
+
+      MySqlParameter name = new MySqlParameter();
+      name.ParameterName = "@name";
+      name.Value = newName;
+      cmd.Parameters.Add(name);
+
+      MySqlParameter id = new MySqlParameter();
+      id.ParameterName = "@thisId";
+      id.Value = _id;
+      cmd.Parameters.Add(id);
+
+      _name = newName;
+
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if(conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+    public void Delete()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM bands WHERE id = @thisId; DELETE FROM bands_venues WHERE band_id = @thisId;";
+
+      MySqlParameter thisId = new MySqlParameter();
+      thisId.ParameterName = "@thisId";
+      thisId.Value = _id;
+      cmd.Parameters.Add(thisId);
+
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if(conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
     public static Band Find(int id)
     {
       MySqlConnection conn = DB.Connection();

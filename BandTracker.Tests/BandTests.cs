@@ -67,6 +67,38 @@ namespace BandTracker.Tests
       Assert.AreEqual(expected, actual);
     }
 
+    [TestMethod]
+    public void Update_UpdatesBandNameInDatabase_Band()
+    {
+      Band newBand = new Band("Seven Lions");
+      newBand.Save();
+
+      newBand.Update("Seven Lions & Jason Ross");
+      Band expected = newBand;
+      Band actual = Band.GetAll()[0];
+
+      Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void Delete_DeletesBandFromDatabase_BandList()
+    {
+      Band one = new Band("one");
+      Band two = new Band("two");
+      Band three = new Band("three");
+
+      one.Save();
+      two.Save();
+      three.Save();
+
+      two.Delete();
+
+      List<Band> expected = new List<Band> {one, three};
+      List<Band> actual = Band.GetAll();
+
+      CollectionAssert.AreEqual(expected, actual);
+    }
+
     public void Dispose()
     {
       Band.DeleteAll();
