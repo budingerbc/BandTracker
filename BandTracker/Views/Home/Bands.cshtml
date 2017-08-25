@@ -16,6 +16,14 @@ else
 
   @foreach(var band in Model)
   {
-    <a href="/band-details/@band.GetId()"><div class="well">@band.GetName()</div></a>
+    <form action="/band-deleted/@band.GetId()" method="post">
+      <a href="/band-details/@band.GetId()">
+        <div class="well">
+          <h4>@band.GetName()
+            <button type="submit" class="btn btn-danger delete">X</button>
+            </h4>
+        </div>
+      </a>
+    </form>
   }
 }
