@@ -33,6 +33,80 @@ namespace BandTracker.Tests
       Assert.AreEqual(expected, actual);
     }
 
+    [TestMethod]
+    public void GetBandHistory_GetsAllBandsThatPlayedAtVenue_BandList()
+    {
+      Venue newVenue = new Venue("Gorge Amphitheatre");
+      Band one = new Band("Armin Van Buuren");
+      Band two = new Band("Porter Robinson");
+      Band three = new Band("Morgan Page");
+
+      newVenue.Save();
+      one.Save();
+      two.Save();
+      three.Save();
+
+      newVenue.AddBand(one);
+      newVenue.AddBand(two);
+
+      List<Band> expected = new List<Band> {one, two};
+      List<Band> actual = newVenue.GetBandHistory();
+
+      CollectionAssert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void Update_UpdatesVenueNameInDatabase_VenueName()
+    {
+      Venue newVenue = new Venue("Gorge Amphitheatre");
+      string expected = "Red Rocks";
+      newVenue.Update(expected);
+
+      string actual = newVenue.GetName();
+
+      Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void Delete_DeletesVenueInDB_VenueList()
+    {
+      Venue one = new Venue("Gorge Amphitheatre");
+      Venue two = new Venue("Red Rocks");
+      Venue three = new Venue("WaMu");
+
+      one.Save();
+      two.Save();
+      three.Save();
+      two.Delete();
+
+      List<Venue> expected = new List<Venue> {one, three};
+      List<Venue> actual = Venue.GetAll();
+
+      CollectionAssert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void Delete_DeletesVenueBandLinkInDB_VenueList()
+    {
+      Venue testVenue = new Venue("Gorge Amphitheatre");
+      Venue keepVenue = new Venue("Red Rocks");
+      Band testBand = new Band("Seven Lions");
+
+      testVenue.Save();
+      keepVenue.Save();
+      testBand.Save();
+
+      testVenue.AddBand(testBand);
+      keepVenue.AddBand(testBand);
+      testVenue.Delete();
+
+      List<Venue> expected = new List<Venue> {keepVenue};
+      List<Venue> actual = testBand.GetVenuesPlayedAt();
+
+      CollectionAssert.AreEqual(expected, actual);
+    }
+
+
     public void Dispose()
     {
       Band.DeleteAll();
