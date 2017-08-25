@@ -106,6 +106,17 @@ namespace BandTracker.Tests
       CollectionAssert.AreEqual(expected, actual);
     }
 
+    [TestMethod]
+    public void Find_FindsVenueInDatabaseById_VenueId()
+    {
+      Venue newVenue = new Venue("Red Rocks");
+      newVenue.Save();
+
+      int expected = newVenue.GetId();
+      int actual = Venue.Find(newVenue.GetId()).GetId();
+
+      Assert.AreEqual(expected, actual);
+    }
 
     public void Dispose()
     {

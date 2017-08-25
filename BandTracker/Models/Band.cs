@@ -127,6 +127,38 @@ namespace BandTracker.Models
       return venuesPlayed;
     }
 
+    public static Band Find(int id)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM bands WHERE id = @thisId;";
+
+      MySqlParameter band = new MySqlParameter();
+      band.ParameterName = "@thisid";
+      band.Value = id;
+      cmd.Parameters.Add(band);
+
+      int bandId = 0;
+      string bandName = "";
+
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        bandId = rdr.GetInt32(0);
+        bandName = rdr.GetString(1);
+      }
+
+      Band foundBand = new Band(bandName, bandId);
+      conn.Close();
+      if(conn != null)
+      {
+        conn.Dispose();
+      }
+      return foundBand;
+    }
+
     public static List<Band> GetAll()
     {
       List<Band> allBands = new List<Band> {};

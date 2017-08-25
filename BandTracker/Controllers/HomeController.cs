@@ -34,6 +34,12 @@ namespace BandTracker.Controllers
       return View("Venues", Venue.GetAll());
     }
 
+    [HttpGet("/venue-details/{id}")]
+    public ActionResult VenueDetails(int id)
+    {
+      return View(Venue.Find(id));
+    }
+
     [HttpGet("/bands")]
     public ActionResult Bands()
     {

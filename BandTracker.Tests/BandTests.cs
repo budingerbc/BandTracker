@@ -55,6 +55,18 @@ namespace BandTracker.Tests
       CollectionAssert.AreEqual(expected, actual);
     }
 
+    [TestMethod]
+    public void Find_FindsBandInDatabaseById_BandId()
+    {
+      Band newBand = new Band("Seven Lions");
+      newBand.Save();
+
+      int expected = newBand.GetId();
+      int actual = Band.Find(newBand.GetId()).GetId();
+
+      Assert.AreEqual(expected, actual);
+    }
+
     public void Dispose()
     {
       Band.DeleteAll();

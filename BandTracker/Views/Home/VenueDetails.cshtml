@@ -6,18 +6,15 @@
   <h1>@Model.GetName()</h1>
 </div>
 
-<form action="/band-added/@Model.GetId()" method="post">
+<div class="row">
+  <div class="col-md-6">
 
-</form>
+    <h2>Band History</h2>
 
-@if(Model.GetBandHistory().Count == 0)
-{
-  <h2>No bands have played here</h2>
-}
-else
-{
-  @foreach(var band in Model.GetBandHistory())
-  {
-    <a href="/band-details/@band.GetId()"><div class="well">@band.GetName()</div></a>
-  }
-}
+  </div>
+  <div class="col-md-6">
+
+    <h2>Add Band to Venue</h2>
+
+  </div>
+</div>
