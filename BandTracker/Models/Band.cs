@@ -45,6 +45,88 @@ namespace BandTracker.Models
       return _name.GetHashCode();
     }
 
+    public void Save()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO bands (name) VALUES (@name);";
+
+      MySqlParameter bandName = new MySqlParameter();
+      bandName.ParameterName = "@name";
+      bandName.Value = _name;
+      cmd.Parameters.Add(bandName);
+
+      cmd.ExecuteNonQuery();
+      _id = (int) cmd.LastInsertedId;
+      conn.Close();
+      if(conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+    public void AddVenue(Venue newVenue)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO bands_venues (band_id, venue_id) VALUES (@thisId, @venueId);";
+
+      MySqlParameter bandId = new MySqlParameter();
+      bandId.ParameterName = "@thisId";
+      bandId.Value = _id;
+      cmd.Parameters.Add(bandId);
+
+      MySqlParameter venueId = new MySqlParameter();
+      venueId.ParameterName = "@venueId";
+      venueId.Value = newVenue.GetId();
+      cmd.Parameters.Add(venueId);
+
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if(conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+    public List<Venue> GetVenuesPlayedAt()
+    {
+      List<Venue> venuesPlayed = new List<Venue> {};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT venues.* FROM bands
+      JOIN bands_venues ON (bands.id = bands_venues.band_id)
+      JOIN venues ON (bands_venues.venue_id = venues.id)
+      WHERE bands.id = @thisId;";
+
+      MySqlParameter thisId = new MySqlParameter();
+      thisId.ParameterName = "@thisId";
+      thisId.Value = _id;
+      cmd.Parameters.Add(thisId);
+
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        int id = rdr.GetInt32(0);
+        string name = rdr.GetString(1);
+
+        Venue newVenue = new Venue(name, id);
+        venuesPlayed.Add(newVenue);
+      }
+      conn.Close();
+      if(conn != null)
+      {
+        conn.Dispose();
+      }
+      return venuesPlayed;
+    }
+
     public static List<Band> GetAll()
     {
       List<Band> allBands = new List<Band> {};
@@ -69,6 +151,23 @@ namespace BandTracker.Models
         conn.Dispose();
       }
       return allBands;
+    }
+
+    public static void DeleteAll()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM bands; DELETE FROM bands_venues;";
+
+      cmd.ExecuteNonQuery();
+
+      conn.Close();
+      if(conn != null)
+      {
+        conn.Dispose();
+      }
     }
   }
 }
