@@ -1,0 +1,21 @@
+@{
+  Layout = "_Layout";
+}
+
+@if(Model.Count == 0)
+{
+  <div class="page-header">
+    <h1>There are no venues</h1>
+  </div>
+}
+else
+{
+  <div class="page-header">
+    <h1>Venues</h1>
+  </div>
+  
+  @foreach(var venue in Model)
+  {
+    <a href="/venue-details/@venue.GetId()"><div class="well">@venue.GetName()</div></a>
+  }
+}

@@ -1,0 +1,23 @@
+@{
+  Layout = "_Layout";
+}
+
+<div class="page-header">
+  <h1>@Model.GetName()</h1>
+</div>
+
+<form action="/band-added/@Model.GetId()" method="post">
+
+</form>
+
+@if(Model.GetBandHistory().Count == 0)
+{
+  <h2>No bands have played here</h2>
+}
+else
+{
+  @foreach(var band in Model.GetBandHistory())
+  {
+    <a href="/band-details/@band.GetId()"><div class="well">@band.GetName()</div></a>
+  }
+}
