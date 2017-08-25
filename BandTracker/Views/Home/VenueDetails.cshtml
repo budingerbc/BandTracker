@@ -3,18 +3,41 @@
 }
 
 <div class="page-header">
-  <h1>@Model.GetName()</h1>
+  <h1><a href='/venue-details/@Model["venue"].GetId()/edit'>@Model["venue"].GetName()</a></h1>
 </div>
 
 <div class="row">
   <div class="col-md-6">
 
-    <h2>Band History</h2>
+
+    <div class="page-header">
+      <h3>Band History</h3>
+    </div>
+
+    @foreach(var band in Model["venue"].GetBandHistory())
+    {
+      <a href="/band-details/@band.GetId()"><div class="well">@band.GetName()</div></a>
+    }
+
 
   </div>
   <div class="col-md-6">
 
-    <h2>Add Band to Venue</h2>
+<div class="page-header">
+    <h3>Add Band to Venue</h3>
+  </div>
+
+  <form action='/venue-details/@Model["venue"].GetId()/bands-added' method="post">
+    <label for="sel1">Add band(s):</label>
+    <select multiple class="form-control" name="bands" required>
+      @foreach(var band in Model["bands"])
+      {
+        <option value="@band.GetId()">@band.GetName()</option>
+      }
+    </select>
+    <button type="submit" class="btn btn-success form-input" name="button">Add band(s)</button>
+  </form>
+
 
   </div>
 </div>

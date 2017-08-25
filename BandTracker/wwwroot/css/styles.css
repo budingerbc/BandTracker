@@ -1,3 +1,12 @@
 .form-input {
   margin-top: 10px;
 }
+
+.delete {
+  float: right;
+  vertical-align: middle;
+}
+
+.jumbotron {
+  text-align: center;
+}

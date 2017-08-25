@@ -13,9 +13,18 @@ else
   <div class="page-header">
     <h1>Venues</h1>
   </div>
-  
+
   @foreach(var venue in Model)
   {
-    <a href="/venue-details/@venue.GetId()"><div class="well">@venue.GetName()</div></a>
+    <form action="/venue-deleted/@venue.GetId()" method="post">
+      <a href="/venue-details/@venue.GetId()">
+        <div class="well">
+          <h4>@venue.GetName()
+            <button
+            <button type="submit" class="btn btn-danger delete">X</button>
+            </h4>
+        </div>
+      </a>
+    </form>
   }
 }

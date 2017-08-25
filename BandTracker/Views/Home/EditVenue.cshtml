@@ -1,0 +1,12 @@
+@{
+  Layout = "_Layout";
+}
+
+<div class="page-header">
+  <h1>Edit Venue</h1>
+</div>
+<form action="/venue-details/@Model.GetId()/updated" method="post" class="form-group">
+  <label for="venue">Venue Name</label>
+  <input type="text" name="venue-name" class="form-control" placeholder="@Model.GetName()" pattern=".{1,}" required title="One or more characters" autofocus>
+  <button type="submit" class="btn btn-success form-input" name="button">Update</button>
+</form>
